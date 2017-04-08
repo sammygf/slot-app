@@ -1,0 +1,18 @@
+<div class="md-slot-machine" *ngIf="config && state">
+  <div class="md-slot-machine__reels">
+    <div *ngFor="let reel of reels" class="md-slot-machine__reel">
+      <reel [height]="400" [rowsCount]="config.rows" [symbols]="reel.symbols"></reel>
+    </div>
+  </div>
+  <!--<div class="md-slot-machine__info">-->
+    <!--<div class="md-slot-machine__balance">{{state.balance}}</div>-->
+  <!--</div>-->
+  <div class="md-slot-machine__controls">
+    <button (click)="selectLines()">Lines {{linesCount}}</button>
+    <button (click)="increaseLineBet()">plus</button>
+    <button (click)="decreaseLineBet()">minus</button>
+    {{lineBet * config.coinValue}}
+    <button (click)="spin()">Spin</button>
+    <span>win {{state.totalWin}}</span>
+  </div>
+</div>

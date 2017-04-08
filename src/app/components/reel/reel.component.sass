@@ -1,0 +1,27 @@
+.md-reel
+  width: 100%
+  //perspective: 1600px
+  position: relative
+  overflow: hidden
+
+.md-reel__stripe
+  position: absolute
+  margin: 0 auto
+  height: 100%
+  width: 100%
+  transform-style: preserve-3d
+
+.md-reel__cell
+  position: absolute
+  width: 100%
+  opacity: 0.7
+  color: rgba(0, 0, 0, 0.9)
+  backface-visibility: hidden
+
+  p
+    font-size: 36px
+    font-weight: bold
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
