@@ -1,18 +1,33 @@
 <div class="md-slot-machine" *ngIf="config && state">
+  <div class="md-slot-machine__display">Balance: {{state.balance}}</div>
   <div class="md-slot-machine__reels">
     <div *ngFor="let reel of reels" class="md-slot-machine__reel">
-      <reel [height]="400" [rowsCount]="config.rows" [symbols]="reel.symbols"></reel>
+      <slot-machine-reel [height]="400" [rowsCount]="config.rows" [symbols]="reel.symbols"></slot-machine-reel>
     </div>
   </div>
-  <!--<div class="md-slot-machine__info">-->
-    <!--<div class="md-slot-machine__balance">{{state.balance}}</div>-->
-  <!--</div>-->
+  <div class="md-slot-machine__info">
+    <div class="md-slot-machine__display">Lines: {{betInfo.linesCount}}</div>
+    <div class="md-slot-machine__display">Line bet: {{betInfo.lineBet}}</div>
+    <div class="md-slot-machine__display">Total bet {{betInfo.lineBet * betInfo.linesCount}}</div>
+    <div class="md-slot-machine__display">Win: {{state.totalWin}}</div>
+  </div>
   <div class="md-slot-machine__controls">
-    <button (click)="selectLines()">Lines {{linesCount}}</button>
-    <button (click)="increaseLineBet()">plus</button>
-    <button (click)="decreaseLineBet()">minus</button>
-    {{lineBet * config.coinValue}}
-    <button (click)="spin()">Spin</button>
-    <span>win {{state.totalWin}}</span>
+    <div class="md-slot-machine__controls__column">
+      <slot-machine-button (click)="selectLines()">Lines</slot-machine-button>
+    </div>
+    <div class="md-slot-machine__controls__column">
+      <slot-machine-button (click)="decreaseLineBet()">Bet-</slot-machine-button>
+      <!--<span>{{betInfo.lineBet}}</span>-->
+    </div>
+    <div class="md-slot-machine__controls__column">
+      <!--<span>{{betInfo.lineBet}}</span>-->
+      <slot-machine-button (click)="increaseLineBet()">Bet+</slot-machine-button>
+    </div>
+    <div class="md-slot-machine__controls__column">
+      <slot-machine-button (click)="betMax()">Bet max</slot-machine-button>
+    </div>
+    <div class="md-slot-machine__controls__column">
+      <slot-machine-button (click)="spin()">Spin</slot-machine-button>
+    </div>
   </div>
 </div>

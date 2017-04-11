@@ -1,7 +1,0 @@
-<div class="md-reel" [style.height]="height + 'px'">
-  <div class="md-reel__stripe" [@spin-trigger]="state" (@spin-trigger.done)="spinAnimationEnd($event)">
-    <div class="md-reel__cell" *ngFor="let cell of cells"
-         [style.transform]="cell.transform"
-         [style.height]="cell.height"><p>{{cell.value}}</p></div>
-  </div>
-</div>

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {SlotMachineService} from '../../services/slot-machine/slot-machine.service';
 import {SlotMachineConfig} from '../../models/slot-machine-config';
 import {SlotMachineState} from '../../models/slot-machine-state';
+import {BetInfo} from '../../models/bet-info';
 
 @Component({
   selector: 'slot-machine',
@@ -12,76 +13,62 @@ import {SlotMachineState} from '../../models/slot-machine-state';
 export class SlotMachineComponent implements OnInit {
   config: SlotMachineConfig;
   state: SlotMachineState;
-  lineBet: number;
-  linesCount: number;
+  betInfo: BetInfo;
   reels: Array<any> = [];
 
   constructor(private slotMachineService: SlotMachineService) {
-    this.lineBet = 0;
-    this.linesCount = 1;
+    this.slotMachineService.stateChanged().subscribe(this.updateState.bind(this));
+    this.slotMachineService.betInfoChanged().subscribe(this.updateBetInfo.bind(this));
   }
 
   ngOnInit() {
     this.slotMachineService
       .getConfig()
-      .subscribe(
-        this.processConfig.bind(this));
+      .then(this.processConfig.bind(this));
+  }
 
-    // this.slotMachineService
-    //   .resetMachine()
-    //   .subscribe(this.setState.bind(this));
+  betMax() {
+    this.slotMachineService.betMax();
   }
 
   spin() {
-    this.slotMachineService
-      .spin(this.lineBet, this.linesCount)
-      .subscribe((state) => {
-        this.setState(state);
-      });
+    this.slotMachineService.spin();
   }
 
   increaseLineBet() {
-    if (this.lineBet < this.config.maxCoins) {
-      this.lineBet++;
-    }
+    this.slotMachineService.increaseLineBet();
   }
 
   decreaseLineBet() {
-    if (this.lineBet > this.config.minCoins) {
-      this.lineBet--;
-    }
+    this.slotMachineService.decreaseLineBet();
   }
 
   selectLines() {
-    if (this.linesCount < this.config.lines.length) {
-      this.linesCount++;
-    } else {
-      this.linesCount = 1;
-    }
+    this.slotMachineService.selectLines();
   }
 
   private processConfig(config: SlotMachineConfig) {
     this.config = config;
 
     if (this.config) {
-      this.lineBet = this.config.minCoins;
       for (let i = 0; i < this.config.reels; i++) {
         this.reels.push({});
       }
     }
-
-    this.slotMachineService
-      .getState()
-      .subscribe(this.setState.bind(this));
   }
 
-  private setState(state) {
-    this.state = state;
-    for (let i = 0; i < this.reels.length; i++) {
-      let reel = this.reels[i];
-      let reelSymbols = [];
+  private updateBetInfo(betInfo: BetInfo) {
+    this.betInfo = betInfo;
+  }
 
-      for (let symbols of state.symbols) {
+  private updateState(state: SlotMachineState) {
+    this.state = state;
+
+    for (let i = 0; i < this.reels.length; i++) {
+      const reel = this.reels[i];
+      const reelSymbols = [];
+
+      for (const symbols of state.symbols) {
         reelSymbols.push(symbols[i]);
       }
 
